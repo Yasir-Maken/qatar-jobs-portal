@@ -2,8 +2,10 @@
 
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useClerk } from "@clerk/nextjs";
 // Import the Button component you just installed with the CLI
 import { Button } from "@/components/ui/button";
+import { QatarJobLogo } from "@/components/qatar-logo";
 import {
   Card,
   CardContent,
@@ -108,7 +110,7 @@ const content = {
     footerDescription:
       "Connecting talent with opportunity in the heart of the Gulf.",
     socialMedia: "Follow us on",
-    footerCopyright: "© 2024 Qatar Jobs Portal by (QTS). All rights reserved.",
+    footerCopyright: " Qatar Jobs Portal by (QTS). All rights reserved.", // ©
   },
   ar: {
     header: "بوابة وظائف قطر",
@@ -116,7 +118,7 @@ const content = {
     signUp: "إنشاء حساب",
     heroTitle: "🇶🇦 ابحث عن وظيفة أحلامك في قطر",
     heroSubtitle: "رحلتك للبحث عن وظيفة",
-    heroSubtitle2: "تبدأ من هنا!",
+    heroSubtitle2: "تبدأ من هنا",
     explorJobs: "إيجاد وظيفة",
     postJobs: "إعلان وظيفة",
     activeJobs: "الوظائف المتاحة",
@@ -177,7 +179,7 @@ const content = {
     ctaSectionDescription:
       "انضم إلى أسرع شبكة مهنية نمواً في قطر واكتشف الفرص التي تتوافق مع طموحاتك.",
 
-    footerDownload: "حميل التطبيق الآن",
+    footerDownload: "حمل التطبيق الآن",
     footerDescription: "ربط الموهبة بالفرصة في قلب الخليج.",
     downloadAppIos: "تحميل للآيفون",
     downloadAppAndroid: "تحميل للأندرويد",
@@ -196,27 +198,75 @@ export default function Home() {
     setLang(isArabic ? "en" : "ar");
   };
 
+  const { redirectToSignIn, redirectToSignUp } = useClerk();
+
   return (
-    <div className={cn("min-h-screen bg-background", isArabic && "rtl")}>
+    <div
+      className={cn(
+        "min-h-screen bg-background",
+        isArabic ? "rtl font-cairo" : "font-inter"
+      )}
+    >
       {/* Fixed Header */}
+
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <Briefcase className="w-5 h-5 text-primary-foreground" />
+        <div className="container mx-auto px-4 py-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between h-auto sm:h-16">
+          {/* Row 1: Logo + Title (left), Language button (right) */}
+          <div className="flex w-full items-center justify-between">
+            <div className="hidden sm:flex">
+              <QatarJobLogo header={t.header} />
             </div>
-            <span className="text-xl font-bold text-foreground">
-              {t.header}
-            </span>
+
+            {/* On desktop, show all buttons in a row */}
+            <div className="hidden sm:flex items-center space-x-3">
+              <Link href="/signin">
+                {" "}
+                <Button variant="ghost" size="sm">
+                  {t.signIn}
+                </Button>
+              </Link>
+              <Link href="/signup">
+                <Button size="sm">{t.signUp}</Button>
+              </Link>
+
+              <Button variant="outline" size="icon" onClick={toggleLanguage}>
+                <Globe className="h-5 w-5" />
+              </Button>
+            </div>
           </div>
-          <div className="flex items-center space-x-3">
-            <Button variant="ghost" size="sm">
-              {t.signIn}
-            </Button>
-            <Button size="sm">{t.signUp}</Button>
-            <Button variant="outline" size="icon" onClick={toggleLanguage}>
-              <Globe className="h-5 w-5" />
-            </Button>
+
+          {/* On mobile, stack buttons below */}
+          <div className="flex flex-col w-full gap-2 sm:hidden">
+            {/*  */}
+            {/* Row 1: Logo + Title (left), Language button (right) */}
+            <div className="flex w-full items-center justify-between">
+              <div className="space-x-3 min-w-0">
+                <QatarJobLogo header={t.header} />
+              </div>
+
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={toggleLanguage}
+                className="ml-2 flex-shrink-0"
+              >
+                <Globe className="h-5 w-5" />
+              </Button>
+            </div>
+            {/* Row 2: Sign Up (full width on mobile, inline on desktop) */}
+            <div className="grid grid-cols-2 gap-4">
+              <Link href="/signin">
+                <Button variant="ghost" size="sm" className="w-full">
+                  {t.signIn}
+                </Button>
+              </Link>
+
+              <Link href="/signup">
+                <Button size="sm" className="w-full">
+                  {t.signUp}
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </header>
@@ -230,9 +280,11 @@ export default function Home() {
                 <Badge variant="secondary" className="text-sm px-4 py-2">
                   {t.heroTitle}
                 </Badge>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
                   {t.heroSubtitle}
-                  <span className="text-primary block">{t.heroSubtitle2}</span>
+                  <span className="text-primary lg:mt-4 block">
+                    {t.heroSubtitle2}
+                  </span>
                 </h1>
                 <p className="text-xl text-muted-foreground max-w-2xl">
                   {t.heroDescription}
