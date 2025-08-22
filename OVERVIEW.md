@@ -1,6 +1,6 @@
 📂 File Structure.
 
-├── app/
+├── app/    
 │ ├── dashboard/
 │ │ ├── employer/
 │ │ ├── job-seeker/
