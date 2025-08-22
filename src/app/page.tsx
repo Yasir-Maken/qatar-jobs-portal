@@ -225,7 +225,7 @@ export default function Home() {
                   {t.signIn}
                 </Button>
               </Link>
-              <Link href="/signup">
+              <Link href="/sign-up">
                 <Button size="sm">{t.signUp}</Button>
               </Link>
 
@@ -261,7 +261,7 @@ export default function Home() {
                 </Button>
               </Link>
 
-              <Link href="/signup">
+              <Link href="/sign-up">
                 <Button size="sm" className="w-full">
                   {t.signUp}
                 </Button>
